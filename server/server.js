@@ -13,14 +13,18 @@ app.use(express.json());
 // ROUTE HANDLER
 //? Get all restaurants
 app.get("/api/v1/restaurants", async (req, res) => {
-  const results = await db.query("SELECT * FROM restaurants");
-  console.log(results);
-  res.status(200).json({
-    status: "Success",
-    data: {
-      restaurant: ["McDonalds", "In n Out"],
-    },
-  });
+  try {
+    const results = await db.query("SELECT * FROM restaurants");
+    res.status(200).json({
+      status: "Success",
+      results: results.rows.length,
+      data: {
+        restaurants: results.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 //? Get a restaurant
