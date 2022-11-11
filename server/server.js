@@ -51,7 +51,6 @@ app.post("/api/v1/restaurants", async (req, res) => {
       "INSERT INTO restaurants (name, location, price_range) VALUES ($1, $2, $3) RETURNING *",
       [req.body.name, req.body.location, req.body.price_range]
     );
-    console.log(results);
     res.status(201).json({
       status: "Success",
       data: {
@@ -70,7 +69,6 @@ app.put("/api/v1/restaurants/:id", async (req, res) => {
       "UPDATE restaurants SET name = $1, location = $2, price_range = $3 WHERE id = $4 RETURNING *",
       [req.body.name, req.body.location, req.body.price_range, req.params.id]
     );
-    console.log(results);
     res.status(200).json({
       status: "Success",
       data: {
@@ -83,10 +81,17 @@ app.put("/api/v1/restaurants/:id", async (req, res) => {
 });
 
 //? Delete a restaurant
-app.delete("/api/v1/restaurants/:id", (req, res) => {
-  res.status(204).json({
-    status: "Success",
-  });
+app.delete("/api/v1/restaurants/:id", async (req, res) => {
+  try {
+    const results = db.query("DELETE FROM restaurants WHERE id = $1", [
+      req.params.id,
+    ]);
+    res.status(204).json({
+      status: "Success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.listen(port, () => {
