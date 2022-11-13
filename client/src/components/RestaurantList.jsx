@@ -4,6 +4,18 @@ import { RestaurantsContext } from "../context/RestaurantsContext";
 
 export const RestaurantList = () => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const handleDelete = async (id) => {
+    try {
+      const response = await RestaurantFinder.delete(`/${id}`);
+      setRestaurants(
+        restaurants.filter((restaurant) => {
+          return restaurant.id !== id;
+        })
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,7 +53,12 @@ export const RestaurantList = () => {
                     <button className="btn btn-warning">Update</button>
                   </td>
                   <td>
-                    <button className="btn btn-danger">Delete</button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDelete(restaurant.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );
