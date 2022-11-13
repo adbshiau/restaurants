@@ -1,9 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import RestaurantAPI from "../APIs/RestaurantAPI";
+import { RestaurantsContext } from "../context/RestaurantsContext";
 
 export const AddRestaurant = () => {
+  const { addRestaurants } = useContext(RestaurantsContext);
   const [name, setName] = useState();
   const [location, setLocation] = useState();
   const [priceRange, setPriceRange] = useState("Price Range");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await RestaurantAPI.post("/", {
+        name,
+        location,
+        price_range: priceRange,
+      });
+      addRestaurants(response.data.data.restaurant);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="mb-4">
       <form action="">
@@ -41,7 +59,13 @@ export const AddRestaurant = () => {
             </select>
           </div>
           <div className="col-1">
-            <button className="btn btn-primary">Add</button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleSubmit}
+            >
+              Add
+            </button>
           </div>
         </div>
       </form>

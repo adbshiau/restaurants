@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import RestaurantFinder from "../APIs/RestaurantFinder";
+import RestaurantFinder from "../APIs/RestaurantAPI";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 
 export const RestaurantList = () => {
