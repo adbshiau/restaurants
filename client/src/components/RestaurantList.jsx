@@ -6,8 +6,9 @@ import { RestaurantsContext } from "../context/RestaurantsContext";
 export const RestaurantList = () => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const navigate = useNavigate();
-  const handleDelete = async (id) => {
+  const handleDelete = async (e, id) => {
     try {
+      e.stopPropagation();
       const response = await RestaurantFinder.delete(`/${id}`);
       setRestaurants(
         restaurants.filter((restaurant) => {
@@ -19,7 +20,8 @@ export const RestaurantList = () => {
     }
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (e, id) => {
+    e.stopPropagation();
     navigate(`/restaurants/${id}/update`);
   };
 
@@ -66,7 +68,7 @@ export const RestaurantList = () => {
                   <td>
                     <button
                       className="btn btn-warning"
-                      onClick={() => handleUpdate(restaurant.id)}
+                      onClick={(e) => handleUpdate(e, restaurant.id)}
                     >
                       Update
                     </button>
@@ -74,7 +76,7 @@ export const RestaurantList = () => {
                   <td>
                     <button
                       className="btn btn-danger"
-                      onClick={() => handleDelete(restaurant.id)}
+                      onClick={(e) => handleDelete(e, restaurant.id)}
                     >
                       Delete
                     </button>
