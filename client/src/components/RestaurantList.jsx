@@ -23,6 +23,10 @@ export const RestaurantList = () => {
     navigate(`/restaurants/${id}/update`);
   };
 
+  const handleRestaurantSelect = (id) => {
+    navigate(`/restaurants/${id}`);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,7 +55,10 @@ export const RestaurantList = () => {
           {restaurants &&
             restaurants.map((restaurant) => {
               return (
-                <tr key={restaurant.id}>
+                <tr
+                  onClick={() => handleRestaurantSelect(restaurant.id)}
+                  key={restaurant.id}
+                >
                   <td>{restaurant.name}</td>
                   <td>{restaurant.location}</td>
                   <td>{"$".repeat(restaurant.price_range)}</td>
