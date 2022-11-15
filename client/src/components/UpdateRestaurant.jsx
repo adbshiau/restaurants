@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import RestaurantAPI from "../APIs/RestaurantAPI";
 
@@ -9,6 +9,17 @@ export const UpdateRestaurant = (props) => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [priceRange, setPriceRange] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updatedRestaurant = await RestaurantAPI.put(`/${id}`, {
+      name,
+      location,
+      price_range: priceRange,
+    });
+    navigate("/");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,7 +27,6 @@ export const UpdateRestaurant = (props) => {
       setName(response.data.data.restaurant.name);
       setLocation(response.data.data.restaurant.location);
       setPriceRange(response.data.data.restaurant.price_range);
-      console.log(response);
     };
     fetchData();
   }, []);
@@ -65,7 +75,11 @@ export const UpdateRestaurant = (props) => {
           <option value="4">$$$$</option>
           <option value="5">$$$$$</option>
         </select>
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleSubmit}
+        >
           Submit
         </button>
       </form>
