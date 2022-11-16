@@ -15,7 +15,7 @@ export const RestaurantDetailPage = () => {
     const fetchData = async () => {
       try {
         const response = await RestaurantAPI.get(`/${id}`);
-        setSelectedRestaurant(response.data.data.restaurant);
+        setSelectedRestaurant(response.data.data);
       } catch (err) {
         console.log(err);
       }
@@ -27,8 +27,11 @@ export const RestaurantDetailPage = () => {
     <div>
       {selectedRestaurant && (
         <>
+          <h1 className="text-center display-1">
+            {selectedRestaurant.restaurant.name}
+          </h1>
           <div className="mb-3">
-            <Reviews />
+            <Reviews reviews={selectedRestaurant.reviews} />
             <AddReview />
           </div>
         </>
