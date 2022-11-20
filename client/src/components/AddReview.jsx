@@ -1,9 +1,22 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import RestaurantAPI from "../APIs/RestaurantAPI";
 
 const AddReview = () => {
+  const { id } = useParams();
   const [name, setName] = useState();
   const [starRating, setStarRating] = useState();
   const [reviewText, setReviewText] = useState();
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    const response = await RestaurantAPI.post(`/${id}/addReview`, {
+      name,
+      review: reviewText,
+      rating: starRating,
+    });
+    console.log(response);
+  };
 
   return (
     <div className="mb-2">
@@ -47,7 +60,13 @@ const AddReview = () => {
             onChange={(e) => setReviewText(e.target.value)}
           ></textarea>
         </div>
-        <button className="btn btn-primary">Submit</button>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleSubmitReview}
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
