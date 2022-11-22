@@ -10,6 +10,16 @@ export const RestaurantDetailPage = () => {
   const { id } = useParams();
   const { selectedRestaurant, setSelectedRestaurant } =
     useContext(RestaurantsContext);
+  const { reviews, setReviews } = useContext(RestaurantsContext);
+
+  const fetchReviews = async () => {
+    try {
+      const reviews = await RestaurantAPI.get(`/${id}`);
+      setReviews(reviews.data.data.reviews);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +32,8 @@ export const RestaurantDetailPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [reviews]);
+
   return (
     <div>
       {selectedRestaurant && (
@@ -30,9 +41,10 @@ export const RestaurantDetailPage = () => {
           <h1 className="text-center display-1">
             {selectedRestaurant.restaurant.name}
           </h1>
+          {/* <StarRating /> */}
           <div className="mb-3">
             <Reviews reviews={selectedRestaurant.reviews} />
-            <AddReview />
+            <AddReview fetchReviews={fetchReviews} />
           </div>
         </>
       )}
